@@ -506,14 +506,6 @@ function showTileGallery(tileType) {
 
             document.getElementById('results').classList.remove('hidden');
         }
-function scrollGallery(direction) {
-  const container = document.getElementById('gallery-container');
-  const scrollAmount = container.offsetWidth * 0.9;
-  container.scrollBy({
-    left: direction === 'left' ? -scrollAmount : scrollAmount,
-    behavior: 'smooth'
-  });
-}
 
         // Initialize
         updateLanguage();
