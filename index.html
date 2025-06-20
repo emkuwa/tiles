@@ -132,12 +132,16 @@
                 </select>
             </div>
 
-            <!-- Tile Gallery -->
-            <div class="gallery-wrapper">
-  <button onclick="scrollGallery('left')" class="gallery-arrow arrow-left">&#8592;</button>
-  <div id="gallery-container" class="gallery-container"></div>
-  <button onclick="scrollGallery('right')" class="gallery-arrow arrow-right">&#8594;</button>
+           <!-- Tile Gallery Display Wrapper -->
+<div id="tile-gallery" class="mb-6 hidden">
+  <label class="block text-sm font-medium text-gray-700 mb-2" id="design-label">Select Design:</label>
+  <div class="gallery-wrapper">
+    <button onclick="scrollGallery('left')" class="gallery-arrow arrow-left">&#8592;</button>
+    <div id="gallery-container" class="gallery-container"></div>
+    <button onclick="scrollGallery('right')" class="gallery-arrow arrow-right">&#8594;</button>
+  </div>
 </div>
+
 
 
             <!-- Step 2: Location Selection -->
