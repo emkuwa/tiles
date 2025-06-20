@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zanzibar Tile Price Calculator - Kikokotoo cha Bei ya Vigae</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .tile-image {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tile-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .tile-image.selected {
+            border: 3px solid #3B82F6;
+            transform: scale(1.05);
+        }
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">
+                <i class="fas fa-calculator mr-2"></i>
+                <span id="header-title">Zanzibar Tile Calculator</span>
+            </h1>
+            <div class="flex items-center space-x-4">
+                <label for="language-select" class="text-sm" id="lang-label">Language:</label>
+                <select id="language-select" class="bg-white text-black px-3 py-1 rounded border">
+                    <option value="en">English</option>
+                    <option value="sw">Kiswahili</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-4 max-w-4xl">
+        <!-- Calculator Card -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-6 text-center" id="calc-title">Tile Price Calculator</h2>
+            
+            <!-- Step 1: Tile Selection -->
+            <div class="mb-6">
+                <label for="tile-type" class="block text-sm font-medium text-gray-700 mb-2" id="tile-type-label">Select Tile Type:</label>
+                <select id="tile-type" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                    <option value="">-- Choose Tile --</option>
+                    <option value="1">Tile #1 (60x60 cm)</option>
+                    <option value="2">Tile #2 (40x40 cm)</option>
+                    <option value="3">Tile #3 (30x30 cm)</option>
+                    <option value="4">Tile #4 (40x25 cm)</option>
+                    <option value="5">Tile #5 (80x10 cm)</option>
+                </select>
+            </div>
+
+            <!-- Tile Gallery -->
+            <div id="tile-gallery" class="mb-6 hidden">
+                <label class="block text-sm font-medium text-gray-700 mb-2" id="design-label">Select Design:</label>
+                <div id="gallery-container" class="gallery-container border border-gray-200 rounded-lg p-3"></div>
+            </div>
+
+            <!-- Step 2: Location Selection -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2" id="location-label">Select Location:</label>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex items-center p-3 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50">
+                        <input type="radio" name="location" value="mjini" class="mr-3">
+                        <div>
+                            <div class="font-semibold" id="mjini-title">Karibu na Mjini</div>
+                            <div class="text-sm text-gray-600" id="mjini-desc">(0-20 km from town)</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50">
+                        <input type="radio" name="location" value="shamba" class="mr-3">
+                        <div>
+                            <div class="font-semibold" id="shamba-title">Shamba</div>
+                            <div class="text-sm text-gray-600" id="shamba-desc">(20-70 km from town)</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 3: Area Input -->
+            <div class="mb-6">
+                <label for="area" class="block text-sm font-medium text-gray-700 mb-2" id="area-label">Area (Square Meters):</label>
+                <input type="number" id="area" step="0.1" min="0.1" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Enter area in sqm">
+            </div>
+
+            <!-- Calculate Button -->
+            <button id="calculate-btn" class="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition-colors font-semibold">
+                <i class="fas fa-calculator mr-2"></i>
+                Calculate Price
+            </button>
+
+            <!-- Results Section -->
+            <div id="results" class="mt-6 hidden">
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-green-800 mb-3" id="results-title">Calculation Results</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="font-medium" id="price-per-tile-label">Price per tile:</span>
+                            <span id="price-per-tile" class="text-green-700 font-bold"></span>
+                        </div>
+                        <div>
+                            <span class="font-medium" id="total-tiles-label">Total tiles needed:</span>
+                            <span id="total-tiles" class="text-green-700 font-bold"></span>
+                        </div>
+                        <div>
+                            <span class="font-medium" id="boxes-needed-label">Boxes needed:</span>
+                            <span id="boxes-needed" class="text-green-700 font-bold"></span>
+                        </div>
+                        <div>
+                            <span class="font-medium" id="total-price-label">Total price:</span>
+                            <span id="total-price" class="text-green-700 font-bold text-lg"></span>
+                        </div>
+                    </div>
+                    <div id="discount-notice" class="mt-3 text-blue-700 font-medium hidden"></div>
+                    <div class="mt-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-center">
+                        <i class="fas fa-truck mr-2"></i>
+                        <span id="cash-delivery" class="font-medium text-yellow-800">Cash on delivery accepted</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WhatsApp Contact -->
+        <div class="bg-green-600 text-white rounded-lg p-4 text-center">
+            <h3 class="text-lg font-semibold mb-2" id="contact-title">Ready to Order?</h3>
+            <a href="https://wa.me/255716002790" target="_blank" class="inline-block bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-lg transition-colors">
+                <i class="fab fa-whatsapp mr-2"></i>
+                <span id="whatsapp-text">Order Now or Chat on WhatsApp</span>
+            </a>
+            <p class="mt-2 text-sm opacity-90">+255 716 002 790</p>
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/255716002790" target="_blank" class="whatsapp-float bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg">
+        <i class="fab fa-whatsapp text-2xl"></i>
+    </a>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                'header-title': 'Zanzibar Tile Calculator',
+                'lang-label': 'Language:',
+                'calc-title': 'Tile Price Calculator',
+                'tile-type-label': 'Select Tile Type:',
+                'design-label': 'Select Design:',
+                'location-label': 'Select Location:',
+                'mjini-title': 'Karibu na Mjini',
+                'mjini-desc': '(0-20 km from town)',
+                'shamba-title': 'Shamba',
+                'shamba-desc': '(20-70 km from town)',
+                'area-label': 'Area (Square Meters):',
+                'calculate-btn': 'Calculate Price',
+                'results-title': 'Calculation Results',
+                'price-per-tile-label': 'Price per tile:',
+                'total-tiles-label': 'Total tiles needed:',
+                'boxes-needed-label': 'Boxes needed:',
+                'total-price-label': 'Total price:',
+                'cash-delivery': 'Cash on delivery accepted',
+                'contact-title': 'Ready to Order?',
+                'whatsapp-text': 'Order Now or Chat on WhatsApp',
+                'discount-applied': 'Discount applied for large area!',
+                'choose-tile': '-- Choose Tile --'
+            },
+            sw: {
+                'header-title': 'Kikokotoo cha Bei ya Vigae Zanzibar',
+                'lang-label': 'Lugha:',
+                'calc-title': 'Kikokotoo cha Bei ya Vigae',
+                'tile-type-label': 'Chagua Aina ya Vigae:',
+                'design-label': 'Chagua Muundo:',
+                'location-label': 'Chagua Mahali:',
+                'mjini-title': 'Karibu na Mjini',
+                'mjini-desc': '(Umbali wa km 0-20 kutoka mjini)',
+                'shamba-title': 'Shamba',
+                'shamba-desc': '(Umbali wa km 20-70 kutoka mjini)',
+                'area-label': 'Eneo (Mita za Mraba):',
+                'calculate-btn': 'Kokotoa Bei',
+                'results-title': 'Matokeo ya Hesabu',
+                'price-per-tile-label': 'Bei ya vigae kimoja:',
+                'total-tiles-label': 'Jumla ya vigae vinavyohitajika:',
+                'boxes-needed-label': 'Masanduku yanayohitajika:',
+                'total-price-label': 'Bei ya jumla:',
+                'cash-delivery': 'Malipo wakati wa utoaji yanakubaliwa',
+                'contact-title': 'Tayari Kuagiza?',
+                'whatsapp-text': 'Agiza Sasa au Piga Simu WhatsApp',
+                'discount-applied': 'Punguzo limewekwa kwa eneo kubwa!',
+                'choose-tile': '-- Chagua Vigae --'
+            }
+        };
+
+        // Tile data
+        const tileData = {
+            1: {
+                name: "Tile #1 (60x60 cm)",
+                prices: { mjini: 9100, shamba: 10010 },
+                tilesPerBox: 4,
+                tileSize: 0.36, // 60x60 cm = 0.36 sqm
+                images: [
+                    'https://drive.google.com/uc?export=view&id=1m3ei3Vjb0F2XyyXSafzEwEvig4VtqHq4',
+                    'https://drive.google.com/uc?export=view&id=1nBQx5YnFvH7qMGKsL9PEtZhRuCkWmXpA',
+                    'https://drive.google.com/uc?export=view&id=1oC8y6ZoGwI8rNHLsM0QFuAiSvDlXnYqB',
+                    'https://drive.google.com/uc?export=view&id=1pD9z7ApHxJ9sOIMtN1RGvBjTwElYoZrC',
+                    'https://drive.google.com/uc?export=view&id=1qE0A8BqIyK0tPJNuO2SHwCkUxFmZpAsD',
+                    'https://drive.google.com/uc?export=view&id=1rF1B9CrJzL1uQKOvP3TIxDlVyGnAqBtE',
+                    'https://drive.google.com/uc?export=view&id=1sG2C0DsKAM2vRLPwQ4UJyEmWzHoBrCuF',
+                    'https://drive.google.com/uc?export=view&id=1tH3D1EtLBN3wSMQxR5VKzFnXAIpCsDvG',
+                    'https://drive.google.com/uc?export=view&id=1uI4E2FuMCO4xTNRyS6WLAGoYBJqDtEwH',
+                    'https://drive.google.com/uc?export=view&id=1vJ5F3GvNDP5yUOSzT7XMBHpZCKrEuFxI',
+                    'https://drive.google.com/uc?export=view&id=1wK6G4HwOEQ6zVPT0U8YNCIqADLsFvGyJ',
+                    'https://drive.google.com/uc?export=view&id=1xL7H5IxPFR7AVQUxV9ZODJrBEMtGwHzK',
+                    'https://drive.google.com/uc?export=view&id=1yM8I6JyQGS8BWRVyW0APEKsCFNuHxIAL',
+                    'https://drive.google.com/uc?export=view&id=1zN9J7KzRHT9CXSWzX1BQFLtDGOvIyJBM',
+                    'https://drive.google.com/uc?export=view&id=10O0K8LASIU0DYTXAYcCRGMuEHPwJzKCN',
+                    'https://drive.google.com/uc?export=view&id=11P1L9MBTJV1EZUYBZdDSHNvFIQxKALDO'
+                ]
+            },
+            2: {
+                name: "Tile #2 (40x40 cm)",
+                prices: { mjini: 3120, shamba: 3432 },
+                tilesPerBox: 6,
+                tileSize: 0.16, // 40x40 cm = 0.16 sqm
+                images: [
+                    'https://via.placeholder.com/40x40/8B5CF6/FFFFFF?text=Design+1',
+                    'https://via.placeholder.com/40x40/06B6D4/FFFFFF?text=Design+2',
+                    'https://via.placeholder.com/40x40/10B981/FFFFFF?text=Design+3',
+                    'https://via.placeholder.com/40x40/F59E0B/FFFFFF?text=Design+4'
+                ]
+            },
+            3: {
+                name: "Tile #3 (30x30 cm)",
+                prices: { mjini: 1690, shamba: 1859 },
+                tilesPerBox: 11,
+                tileSize: 0.09, // 30x30 cm = 0.09 sqm
+                images: [
+                    'https://via.placeholder.com/30x30/EF4444/FFFFFF?text=Design+1',
+                    'https://via.placeholder.com/30x30/3B82F6/FFFFFF?text=Design+2',
+                    'https://via.placeholder.com/30x30/84CC16/FFFFFF?text=Design+3',
+                    'https://via.placeholder.com/30x30/F97316/FFFFFF?text=Design+4'
+                ]
+            },
+            4: {
+                name: "Tile #4 (40x25 cm)",
+                prices: { mjini: 1690, shamba: 1859 },
+                tilesPerBox: 10,
+                tileSize: 0.10, // 40x25 cm = 0.10 sqm
+                images: [
+                    'https://via.placeholder.com/40x25/EC4899/FFFFFF?text=Design+1',
+                    'https://via.placeholder.com/40x25/8B5CF6/FFFFFF?text=Design+2',
+                    'https://via.placeholder.com/40x25/06B6D4/FFFFFF?text=Design+3',
+                    'https://via.placeholder.com/40x25/10B981/FFFFFF?text=Design+4'
+                ]
+            },
+            5: {
+                name: "Tile #5 (80x10 cm)",
+                prices: { mjini: 2990, shamba: 3289 },
+                tilesPerBox: 12,
+                tileSize: 0.08, // 80x10 cm = 0.08 sqm
+                images: [
+                    'https://via.placeholder.com/80x10/6366F1/FFFFFF?text=Design+1',
+                    'https://via.placeholder.com/80x10/F59E0B/FFFFFF?text=Design+2',
+                    'https://via.placeholder.com/80x10/EF4444/FFFFFF?text=Design+3',
+                    'https://via.placeholder.com/80x10/10B981/FFFFFF?text=Design+4'
+                ]
+            }
+        };
+
+        let currentLanguage = 'en';
+        let selectedTileType = null;
+        let selectedLocation = null;
+        let selectedDesign = null;
+
+        // Language switching
+        document.getElementById('language-select').addEventListener('change', function() {
+            currentLanguage = this.value;
+            updateLanguage();
+        });
+
+        function updateLanguage() {
+            const elements = document.querySelectorAll('[id]');
+            elements.forEach(element => {
+                if (translations[currentLanguage][element.id]) {
+                    if (element.tagName === 'INPUT' && element.type === 'submit') {
+                        element.value = translations[currentLanguage][element.id];
+                    } else {
+                        element.textContent = translations[currentLanguage][element.id];
+                    }
+                }
+            });
+
+            // Update select options
+            const tileSelect = document.getElementById('tile-type');
+            tileSelect.options[0].text = translations[currentLanguage]['choose-tile'];
+        }
+
+        // Tile type selection
+        document.getElementById('tile-type').addEventListener('change', function() {
+            selectedTileType = this.value;
+            if (selectedTileType) {
+                showTileGallery(selectedTileType);
+            } else {
+                hideTileGallery();
+            }
+        });
+
+        function showTileGallery(tileType) {
+            const gallery = document.getElementById('tile-gallery');
+            const container = document.getElementById('gallery-container');
+            
+            gallery.classList.remove('hidden');
+            container.innerHTML = '';
+            
+            const tile = tileData[tileType];
+            tile.images.forEach((imageUrl, index) => {
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = `Design ${index + 1}`;
+                img.className = 'tile-image w-20 h-20 object-cover rounded border border-gray-300';
+                img.addEventListener('click', function() {
+                    selectDesign(this, index);
+                });
+                container.appendChild(img);
+            });
+        }
+
+        function hideTileGallery() {
+            document.getElementById('tile-gallery').classList.add('hidden');
+            selectedDesign = null;
+        }
+
+        function selectDesign(imgElement, designIndex) {
+            // Remove previous selection
+            document.querySelectorAll('.tile-image').forEach(img => {
+                img.classList.remove('selected');
+            });
+            
+            // Add selection to clicked image
+            imgElement.classList.add('selected');
+            selectedDesign = designIndex;
+        }
+
+        // Location selection
+        document.querySelectorAll('input[name="location"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                selectedLocation = this.value;
+            });
+        });
+
+        // Calculate button
+        document.getElementById('calculate-btn').addEventListener('click', function() {
+            calculatePrice();
+        });
+
+        function calculatePrice() {
+            // Validate inputs
+            if (!selectedTileType) {
+                alert(currentLanguage === 'en' ? 'Please select a tile type' : 'Tafadhali chagua aina ya vigae');
+                return;
+            }
+
+            if (!selectedLocation) {
+                alert(currentLanguage === 'en' ? 'Please select a location' : 'Tafadhali chagua mahali');
+                return;
+            }
+
+            const area = parseFloat(document.getElementById('area').value);
+            if (!area || area <= 0) {
+                alert(currentLanguage === 'en' ? 'Please enter a valid area' : 'Tafadhali ingiza eneo sahihi');
+                return;
+            }
+
+            // Get tile data
+            const tile = tileData[selectedTileType];
+            let pricePerTile = tile.prices[selectedLocation];
+            
+            // Apply discount for large areas (≥ 43.2 sqm)
+            let discountApplied = false;
+            if (area >= 43.2) {
+                pricePerTile = Math.round(pricePerTile * 0.92); // 8% discount
+                discountApplied = true;
+            }
+
+            // Calculate tiles needed
+            const tilesNeeded = Math.ceil(area / tile.tileSize);
+            const boxesNeeded = Math.ceil(tilesNeeded / tile.tilesPerBox);
+            const totalPrice = tilesNeeded * pricePerTile;
+
+            // Display results
+            displayResults(pricePerTile, tilesNeeded, boxesNeeded, totalPrice, discountApplied);
+        }
+
+        function displayResults(pricePerTile, tilesNeeded, boxesNeeded, totalPrice, discountApplied) {
+            document.getElementById('price-per-tile').textContent = `TSh ${pricePerTile.toLocaleString()}`;
+            document.getElementById('total-tiles').textContent = tilesNeeded.toLocaleString();
+            document.getElementById('boxes-needed').textContent = boxesNeeded.toLocaleString();
+            document.getElementById('total-price').textContent = `TSh ${totalPrice.toLocaleString()}`;
+
+            const discountNotice = document.getElementById('discount-notice');
+            if (discountApplied) {
+                discountNotice.textContent = translations[currentLanguage]['discount-applied'];
+                discountNotice.classList.remove('hidden');
+            } else {
+                discountNotice.classList.add('hidden');
+            }
+
+            document.getElementById('results').classList.remove('hidden');
+        }
+
+        // Initialize
+        updateLanguage();
+    </script>
+</body>
+</html>
