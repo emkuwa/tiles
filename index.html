@@ -330,7 +330,7 @@ images: [
             }
         });
 
-     function showTileGallery(tileType) {
+function showTileGallery(tileType) {
   const gallery = document.getElementById('tile-gallery');
   const container = document.getElementById('gallery-container');
 
@@ -340,12 +340,12 @@ images: [
   const tile = tileData[tileType];
   tile.images.forEach((img, index) => {
     const wrapper = document.createElement('div');
-    wrapper.className = 'text-center';
+    wrapper.className = 'flex flex-col items-center min-w-full scroll-snap-center';
 
     const image = document.createElement('img');
     image.src = `images/${img.file}`;
     image.alt = img.name;
-    image.className = 'tile-image w-full max-w-sm object-cover rounded border border-gray-300 mx-auto';
+    image.className = 'tile-image w-full max-w-xs object-cover rounded border border-gray-300';
 
     const caption = document.createElement('div');
     caption.textContent = `${img.name} (${img.file})`;
@@ -360,6 +360,7 @@ images: [
     container.appendChild(wrapper);
   });
 }
+
 
 
         function hideTileGallery() {
