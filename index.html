@@ -329,25 +329,37 @@ images: [
             }
         });
 
-        function showTileGallery(tileType) {
-            const gallery = document.getElementById('tile-gallery');
-            const container = document.getElementById('gallery-container');
-            
-            gallery.classList.remove('hidden');
-            container.innerHTML = '';
-            
-            const tile = tileData[tileType];
-            tile.images.forEach((imageUrl, index) => {
-                const img = document.createElement('img');
-                img.src = imageUrl;
-                img.alt = `Design ${index + 1}`;
-                img.className = 'tile-image w-20 h-20 object-cover rounded border border-gray-300';
-                img.addEventListener('click', function() {
-                    selectDesign(this, index);
-                });
-                container.appendChild(img);
-            });
-        }
+     function showTileGallery(tileType) {
+  const gallery = document.getElementById('tile-gallery');
+  const container = document.getElementById('gallery-container');
+
+  gallery.classList.remove('hidden');
+  container.innerHTML = '';
+
+  const tile = tileData[tileType];
+  tile.images.forEach((img, index) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'text-center';
+
+    const image = document.createElement('img');
+    image.src = `images/${img.file}`;
+    image.alt = img.name;
+    image.className = 'tile-image w-full max-w-sm object-cover rounded border border-gray-300 mx-auto';
+
+    const caption = document.createElement('div');
+    caption.textContent = `${img.name} (${img.file})`;
+    caption.className = 'text-xs mt-2 text-center';
+
+    image.addEventListener('click', function () {
+      selectDesign(image, index);
+    });
+
+    wrapper.appendChild(image);
+    wrapper.appendChild(caption);
+    container.appendChild(wrapper);
+  });
+}
+
 
         function hideTileGallery() {
             document.getElementById('tile-gallery').classList.add('hidden');
