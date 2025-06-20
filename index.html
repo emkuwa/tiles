@@ -399,7 +399,8 @@ function showTileGallery(tileType) {
     wrapper.className = 'flex flex-col items-center min-w-full scroll-snap-center';
 
     const image = document.createElement('img');
-    image.src = `images/${img.file}`;
+    image.src = `https://emkuwa.github.io/tiles/images/${img.file}`;
+
     image.alt = img.name;
     image.className = 'tile-image w-full max-w-xs object-cover rounded border border-gray-300';
 
