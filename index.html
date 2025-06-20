@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zanzibar Tile Price Calculator - Kikokotoo cha Bei ya Vigae</title>
+    <title>Enhanced Zanzibar Tile Price Calculator - Kikokotoo cha Bei ya Vigae</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
@@ -32,117 +32,135 @@
             100% { transform: scale(1); }
         }
         .gallery-container {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  gap: 12px;
-  scroll-behavior: smooth;
-}
-.gallery-container img {
-  scroll-snap-align: center;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
-.gallery-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 360px;
-  margin: auto;
-}
-
-.gallery-container {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  gap: 12px;
-  scroll-behavior: smooth;
-}
-
-.gallery-container img {
-  scroll-snap-align: center;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
-
-.gallery-arrow {
-  position: absolute;
-  top: 40%;
-  background-color: rgba(255, 255, 255, 0.8);
-  border: none;
-  font-size: 24px;
-  padding: 4px 10px;
-  cursor: pointer;
-  z-index: 10;
-  border-radius: 6px;
-}
-
-.arrow-left {
-  left: -10px;
-}
-
-.arrow-right {
-  right: -10px;
-}
-
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 2px;
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .preview-tile {
+            width: 100%;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #ddd;
+        }
+        .main-tile-display {
+            max-width: 300px;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
     <!-- Header -->
- <header class="bg-blue-600 text-white p-4 shadow-lg">
-  <div class="container mx-auto flex justify-between items-center">
-    <div class="header-title">
-      <i class="fas fa-calculator"></i>
-      <span id="header-title">Zanzibar Tile Calculator</span>
-    </div>
-    <div class="flex items-center space-x-2">
-      <label for="language-select" class="text-sm" id="lang-label">Language:</label>
-      <select id="language-select" class="bg-white text-black px-2 py-1 rounded border">
-        <option value="en">English</option>
-        <option value="sw">Kiswahili</option>
-      </select>
-    </div>
-  </div>
-</header>
-
+    <header class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">
+                <i class="fas fa-calculator mr-2"></i>
+                <span id="header-title">Enhanced Tile Calculator</span>
+            </h1>
+            <div class="flex items-center space-x-4">
+                <label for="language-select" class="text-sm" id="lang-label">Language:</label>
+                <select id="language-select" class="bg-white text-black px-3 py-1 rounded border">
+                    <option value="en">English</option>
+                    <option value="sw">Kiswahili</option>
+                </select>
+            </div>
+        </div>
+    </header>
 
     <!-- Main Content -->
-    <div class="container mx-auto p-4 max-w-4xl">
+    <div class="container mx-auto p-4 max-w-6xl">
         <!-- Calculator Card -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-6 text-center" id="calc-title">Tile Price Calculator</h2>
+            <h2 class="text-xl font-semibold mb-6 text-center" id="calc-title">Enhanced Tile Price Calculator</h2>
             
             <!-- Step 1: Tile Selection -->
             <div class="mb-6">
                 <label for="tile-type" class="block text-sm font-medium text-gray-700 mb-2" id="tile-type-label">Select Tile Type:</label>
                 <select id="tile-type" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
                     <option value="">-- Choose Tile --</option>
-                    <option value="1">Tile #1 (60x60 cm)</option>
-                    <option value="2">Tile #2 (40x40 cm)</option>
-                    <option value="3">Tile #3 (30x30 cm)</option>
-                    <option value="4">Tile #4 (40x25 cm)</option>
-                    <option value="5">Tile #5 (80x10 cm)</option>
+                    <option value="1">Floor Tiles - Premium Porcelain (60x60 cm)</option>
+                    <option value="2">Wall Tiles - Ceramic Gloss (40x40 cm)</option>
+                    <option value="3">Mosaic Tiles - Decorative (30x30 cm)</option>
+                    <option value="4">Subway Tiles - Classic (40x25 cm)</option>
+                    <option value="5">Wood-Look Planks - Luxury Vinyl (80x10 cm)</option>
                 </select>
             </div>
 
-           <!-- Tile Gallery Display Wrapper -->
-<div id="tile-gallery" class="mb-6 hidden">
-  <label class="block text-sm font-medium text-gray-700 mb-2" id="design-label">Select Design:</label>
-  <div class="gallery-wrapper">
-    <button onclick="scrollGallery('left')" class="gallery-arrow arrow-left">&#8592;</button>
-    <div id="gallery-container" class="gallery-container"></div>
-    <button onclick="scrollGallery('right')" class="gallery-arrow arrow-right">&#8594;</button>
-  </div>
-</div>
+            <!-- Tile Details Display -->
+            <div id="tile-details" class="mb-6 hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Main Image Display -->
+                    <div class="text-center">
+                        <img id="main-tile-image" src="" alt="" class="main-tile-display mx-auto mb-4">
+                        <p class="text-sm text-gray-600 mb-2" id="image-filename"></p>
+                        <button id="preview-btn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors">
+                            <i class="fas fa-eye mr-2"></i>
+                            <span id="preview-text">Preview Layout</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Tile Information -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3" id="tile-category"></h3>
+                        <div class="space-y-3">
+                            <div>
+                                <h4 class="font-medium text-gray-700" id="description-label">Description:</h4>
+                                <p id="tile-description" class="text-gray-600 text-sm"></p>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-700" id="dimensions-label">Dimensions:</h4>
+                                <p id="tile-dimensions" class="text-gray-600 text-sm"></p>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-700" id="ideal-usage-label">Ideal Usage:</h4>
+                                <div id="tile-usage" class="flex flex-wrap gap-2 mt-1"></div>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-700" id="features-label">Features:</h4>
+                                <ul id="tile-features" class="text-gray-600 text-sm list-disc list-inside mt-1"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-
+            <!-- Design Gallery -->
+            <div id="tile-gallery" class="mb-6 hidden">
+                <label class="block text-sm font-medium text-gray-700 mb-2" id="design-label">Select Design (15 Available):</label>
+                <div id="gallery-container" class="gallery-container border border-gray-200 rounded-lg p-3"></div>
+            </div>
 
             <!-- Step 2: Location Selection -->
             <div class="mb-6">
@@ -219,6 +237,20 @@
         </div>
     </div>
 
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <div class="bg-white rounded-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold" id="preview-title">Tile Layout Preview</h3>
+                    <button id="close-modal" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
+                <div id="preview-area" class="preview-grid"></div>
+                <p class="text-center text-sm text-gray-600 mt-4" id="preview-note">This preview shows how your selected tiles will look when installed</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Floating WhatsApp Button -->
     <a href="https://wa.me/255716002790" target="_blank" class="whatsapp-float bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg">
         <i class="fab fa-whatsapp text-2xl"></i>
@@ -228,11 +260,11 @@
         // Translations
         const translations = {
             en: {
-                'header-title': 'Zanzibar Tile Calculator',
+                'header-title': 'Enhanced Tile Calculator',
                 'lang-label': 'Language:',
-                'calc-title': 'Tile Price Calculator',
+                'calc-title': 'Enhanced Tile Price Calculator',
                 'tile-type-label': 'Select Tile Type:',
-                'design-label': 'Select Design:',
+                'design-label': 'Select Design (15 Available):',
                 'location-label': 'Select Location:',
                 'mjini-title': 'Karibu na Mjini',
                 'mjini-desc': '(0-20 km from town)',
@@ -249,14 +281,21 @@
                 'contact-title': 'Ready to Order?',
                 'whatsapp-text': 'Order Now or Chat on WhatsApp',
                 'discount-applied': 'Discount applied for large area!',
-                'choose-tile': '-- Choose Tile --'
+                'choose-tile': '-- Choose Tile --',
+                'preview-text': 'Preview Layout',
+                'preview-title': 'Tile Layout Preview',
+                'preview-note': 'This preview shows how your selected tiles will look when installed',
+                'description-label': 'Description:',
+                'dimensions-label': 'Dimensions:',
+                'ideal-usage-label': 'Ideal Usage:',
+                'features-label': 'Features:'
             },
             sw: {
-                'header-title': 'Kikokotoo cha Bei ya Vigae Zanzibar',
+                'header-title': 'Kikokotoo cha Bei ya Vigae - Iliyoboreshwa',
                 'lang-label': 'Lugha:',
-                'calc-title': 'Kikokotoo cha Bei ya Vigae',
+                'calc-title': 'Kikokotoo cha Bei ya Vigae - Iliyoboreshwa',
                 'tile-type-label': 'Chagua Aina ya Vigae:',
-                'design-label': 'Chagua Muundo:',
+                'design-label': 'Chagua Muundo (15 Zinapatikana):',
                 'location-label': 'Chagua Mahali:',
                 'mjini-title': 'Karibu na Mjini',
                 'mjini-desc': '(Umbali wa km 0-20 kutoka mjini)',
@@ -273,81 +312,187 @@
                 'contact-title': 'Tayari Kuagiza?',
                 'whatsapp-text': 'Agiza Sasa au Piga Simu WhatsApp',
                 'discount-applied': 'Punguzo limewekwa kwa eneo kubwa!',
-                'choose-tile': '-- Chagua Vigae --'
+                'choose-tile': '-- Chagua Vigae --',
+                'preview-text': 'Ona Mfano',
+                'preview-title': 'Mfano wa Mpangilio wa Vigae',
+                'preview-note': 'Hii inaonyesha jinsi vigae vyako vitakavyoonekana baada ya kuwekwa',
+                'description-label': 'Maelezo:',
+                'dimensions-label': 'Vipimo:',
+                'ideal-usage-label': 'Matumizi Bora:',
+                'features-label': 'Vipengele:'
             }
         };
 
-        // Tile data
+        // Enhanced tile data with detailed information
         const tileData = {
             1: {
-                name: "Tile #1 (60x60 cm)",
+                name: "Floor Tiles - Premium Porcelain",
+                category: "Premium Floor Tiles",
+                description: "High-quality porcelain tiles with superior durability and water resistance. Perfect for high-traffic areas with elegant finish.",
+                dimensions: "60cm × 60cm (0.36 sqm per tile)",
                 prices: { mjini: 9100, shamba: 10010 },
                 tilesPerBox: 4,
-                tileSize: 0.36, // 60x60 cm = 0.36 sqm
-images: [
-  { name: "Cream Stone", file: "001K.jpg" },
-  { name: "Maroon Glossy", file: "002.jpg" },
-  { name: "Pure White", file: "185T.jpg" },
-  { name: "Beige Smooth", file: "186T.jpg" },
-  { name: "Jet Black", file: "189T.jpg" },
-  { name: "White Sparkle", file: "282T.jpg" },
-  { name: "Wood Brown", file: "283T.jpg" },
-  { name: "Textured Grey", file: "6007.jpg" },
-  { name: "Ice Grey", file: "614T.jpg" },
-  { name: "Marble White", file: "708T.jpg" },
-  { name: "Light Concrete", file: "721T.jpg" },
-  { name: "Sandy Beige", file: "738T.jpg" },
-  { name: "Deep Grey", file: "796T.jpg" }
-]
-
-
+                tileSize: 0.36,
+                usage: ["Living Room", "Kitchen", "Dining Room", "Office", "Commercial"],
+                features: [
+                    "Water resistant",
+                    "Scratch resistant", 
+                    "Easy to clean",
+                    "Slip resistant",
+                    "Fade resistant"
+                ],
+                images: [
+                    { url: 'https://drive.google.com/uc?export=view&id=1m3ei3Vjb0F2XyyXSafzEwEvig4VtqHq4', name: 'marble_white_001.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1nBQx5YnFvH7qMGKsL9PEtZhRuCkWmXpA', name: 'granite_grey_002.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1oC8y6ZoGwI8rNHLsM0QFuAiSvDlXnYqB', name: 'wood_oak_003.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1pD9z7ApHxJ9sOIMtN1RGvBjTwElYoZrC', name: 'stone_beige_004.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1qE0A8BqIyK0tPJNuO2SHwCkUxFmZpAsD', name: 'concrete_dark_005.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1rF1B9CrJzL1uQKOvP3TIxDlVyGnAqBtE', name: 'marble_black_006.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1sG2C0DsKAM2vRLPwQ4UJyEmWzHoBrCuF', name: 'travertine_cream_007.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1tH3D1EtLBN3wSMQxR5VKzFnXAIpCsDvG', name: 'granite_black_008.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1uI4E2FuMCO4xTNRyS6WLAGoYBJqDtEwH', name: 'wood_walnut_009.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1vJ5F3GvNDP5yUOSzT7XMBHpZCKrEuFxI', name: 'marble_gold_010.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1wK6G4HwOEQ6zVPT0U8YNCIqADLsFvGyJ', name: 'stone_grey_011.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1xL7H5IxPFR7AVQUxV9ZODJrBEMtGwHzK', name: 'concrete_light_012.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1yM8I6JyQGS8BWRVyW0APEKsCFNuHxIAL', name: 'marble_green_013.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=1zN9J7KzRHT9CXSWzX1BQFLtDGOvIyJBM', name: 'granite_brown_014.jpg' },
+                    { url: 'https://drive.google.com/uc?export=view&id=10O0K8LASIU0DYTXAYcCRGMuEHPwJzKCN', name: 'wood_cherry_015.jpg' }
+                ]
             },
             2: {
-                name: "Tile #2 (40x40 cm)",
+                name: "Wall Tiles - Ceramic Gloss",
+                category: "Ceramic Wall Tiles",
+                description: "Glossy ceramic tiles ideal for walls with easy maintenance and bright finish. Perfect for bathrooms and kitchens.",
+                dimensions: "40cm × 40cm (0.16 sqm per tile)",
                 prices: { mjini: 3120, shamba: 3432 },
                 tilesPerBox: 6,
-                tileSize: 0.16, // 40x40 cm = 0.16 sqm
+                tileSize: 0.16,
+                usage: ["Bathroom", "Kitchen Backsplash", "Shower", "Laundry Room"],
+                features: [
+                    "Glossy finish",
+                    "Easy to clean",
+                    "Stain resistant",
+                    "Moisture resistant",
+                    "Bright appearance"
+                ],
                 images: [
-                    'https://via.placeholder.com/40x40/8B5CF6/FFFFFF?text=Design+1',
-                    'https://via.placeholder.com/40x40/06B6D4/FFFFFF?text=Design+2',
-                    'https://via.placeholder.com/40x40/10B981/FFFFFF?text=Design+3',
-                    'https://via.placeholder.com/40x40/F59E0B/FFFFFF?text=Design+4'
+                    { url: 'https://via.placeholder.com/200x200/FFFFFF/000000?text=White+Gloss', name: 'white_gloss_001.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/E5E7EB/000000?text=Light+Grey', name: 'light_grey_002.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/3B82F6/FFFFFF?text=Blue+Ceramic', name: 'blue_ceramic_003.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/10B981/FFFFFF?text=Green+Tile', name: 'green_tile_004.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/F59E0B/000000?text=Yellow+Gloss', name: 'yellow_gloss_005.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/EF4444/FFFFFF?text=Red+Ceramic', name: 'red_ceramic_006.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/8B5CF6/FFFFFF?text=Purple+Tile', name: 'purple_tile_007.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/F97316/FFFFFF?text=Orange+Gloss', name: 'orange_gloss_008.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/06B6D4/FFFFFF?text=Cyan+Ceramic', name: 'cyan_ceramic_009.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/84CC16/000000?text=Lime+Tile', name: 'lime_tile_010.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/EC4899/FFFFFF?text=Pink+Gloss', name: 'pink_gloss_011.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/6366F1/FFFFFF?text=Indigo+Ceramic', name: 'indigo_ceramic_012.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/14B8A6/FFFFFF?text=Teal+Tile', name: 'teal_tile_013.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/F472B6/000000?text=Rose+Gloss', name: 'rose_gloss_014.jpg' },
+                    { url: 'https://via.placeholder.com/200x200/A855F7/FFFFFF?text=Violet+Ceramic', name: 'violet_ceramic_015.jpg' }
                 ]
             },
             3: {
-                name: "Tile #3 (30x30 cm)",
+                name: "Mosaic Tiles - Decorative",
+                category: "Decorative Mosaic Tiles",
+                description: "Small decorative tiles perfect for creating artistic patterns and accent walls. Ideal for creative interior designs.",
+                dimensions: "30cm × 30cm (0.09 sqm per tile)",
                 prices: { mjini: 1690, shamba: 1859 },
                 tilesPerBox: 11,
-                tileSize: 0.09, // 30x30 cm = 0.09 sqm
+                tileSize: 0.09,
+                usage: ["Accent Wall", "Backsplash", "Bathroom Feature", "Artistic Patterns"],
+                features: [
+                    "Artistic patterns",
+                    "Multiple colors",
+                    "Creative designs",
+                    "Easy installation",
+                    "Decorative appeal"
+                ],
                 images: [
-                    'https://via.placeholder.com/30x30/EF4444/FFFFFF?text=Design+1',
-                    'https://via.placeholder.com/30x30/3B82F6/FFFFFF?text=Design+2',
-                    'https://via.placeholder.com/30x30/84CC16/FFFFFF?text=Design+3',
-                    'https://via.placeholder.com/30x30/F97316/FFFFFF?text=Design+4'
+                    { url: 'https://via.placeholder.com/150x150/EF4444/FFFFFF?text=Red+Mosaic', name: 'red_mosaic_001.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/3B82F6/FFFFFF?text=Blue+Pattern', name: 'blue_pattern_002.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/84CC16/000000?text=Green+Mosaic', name: 'green_mosaic_003.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/F97316/FFFFFF?text=Orange+Art', name: 'orange_art_004.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/8B5CF6/FFFFFF?text=Purple+Mosaic', name: 'purple_mosaic_005.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/EC4899/FFFFFF?text=Pink+Pattern', name: 'pink_pattern_006.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/06B6D4/FFFFFF?text=Cyan+Mosaic', name: 'cyan_mosaic_007.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/F59E0B/000000?text=Yellow+Art', name: 'yellow_art_008.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/10B981/FFFFFF?text=Emerald+Mosaic', name: 'emerald_mosaic_009.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/6366F1/FFFFFF?text=Indigo+Pattern', name: 'indigo_pattern_010.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/14B8A6/FFFFFF?text=Teal+Mosaic', name: 'teal_mosaic_011.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/F472B6/000000?text=Rose+Art', name: 'rose_art_012.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/A855F7/FFFFFF?text=Violet+Mosaic', name: 'violet_mosaic_013.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/78716C/FFFFFF?text=Bronze+Pattern', name: 'bronze_pattern_014.jpg' },
+                    { url: 'https://via.placeholder.com/150x150/374151/FFFFFF?text=Charcoal+Mosaic', name: 'charcoal_mosaic_015.jpg' }
                 ]
             },
             4: {
-                name: "Tile #4 (40x25 cm)",
+                name: "Subway Tiles - Classic",
+                category: "Classic Subway Tiles",
+                description: "Traditional rectangular tiles with timeless appeal. Perfect for creating classic subway tile patterns in modern spaces.",
+                dimensions: "40cm × 25cm (0.10 sqm per tile)",
                 prices: { mjini: 1690, shamba: 1859 },
                 tilesPerBox: 10,
-                tileSize: 0.10, // 40x25 cm = 0.10 sqm
+                tileSize: 0.10,
+                usage: ["Kitchen Backsplash", "Bathroom Wall", "Shower Area", "Vintage Style"],
+                features: [
+                    "Classic design",
+                    "Versatile patterns",
+                    "Timeless appeal",
+                    "Easy to match",
+                    "Professional look"
+                ],
                 images: [
-                    'https://via.placeholder.com/40x25/EC4899/FFFFFF?text=Design+1',
-                    'https://via.placeholder.com/40x25/8B5CF6/FFFFFF?text=Design+2',
-                    'https://via.placeholder.com/40x25/06B6D4/FFFFFF?text=Design+3',
-                    'https://via.placeholder.com/40x25/10B981/FFFFFF?text=Design+4'
+                    { url: 'https://via.placeholder.com/250x150/EC4899/FFFFFF?text=Classic+White', name: 'classic_white_001.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/8B5CF6/FFFFFF?text=Subway+Grey', name: 'subway_grey_002.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/06B6D4/FFFFFF?text=Metro+Blue', name: 'metro_blue_003.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/10B981/FFFFFF?text=Mint+Green', name: 'mint_green_004.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/F59E0B/000000?text=Cream+Subway', name: 'cream_subway_005.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/EF4444/FFFFFF?text=Brick+Red', name: 'brick_red_006.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/84CC16/000000?text=Sage+Green', name: 'sage_green_007.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/F97316/FFFFFF?text=Terracotta', name: 'terracotta_008.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/6366F1/FFFFFF?text=Navy+Blue', name: 'navy_blue_009.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/14B8A6/FFFFFF?text=Teal+Metro', name: 'teal_metro_010.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/F472B6/000000?text=Blush+Pink', name: 'blush_pink_011.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/A855F7/FFFFFF?text=Lavender', name: 'lavender_012.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/78716C/FFFFFF?text=Taupe+Subway', name: 'taupe_subway_013.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/374151/FFFFFF?text=Charcoal+Metro', name: 'charcoal_metro_014.jpg' },
+                    { url: 'https://via.placeholder.com/250x150/1F2937/FFFFFF?text=Graphite', name: 'graphite_015.jpg' }
                 ]
             },
             5: {
-                name: "Tile #5 (80x10 cm)",
+                name: "Wood-Look Planks - Luxury Vinyl",
+                category: "Luxury Vinyl Planks",
+                description: "Premium vinyl planks with realistic wood appearance. Waterproof and durable, perfect for modern homes.",
+                dimensions: "80cm × 10cm (0.08 sqm per tile)",
                 prices: { mjini: 2990, shamba: 3289 },
                 tilesPerBox: 12,
-                tileSize: 0.08, // 80x10 cm = 0.08 sqm
+                tileSize: 0.08,
+                usage: ["Living Room", "Bedroom", "Kitchen", "Basement", "Commercial"],
+                features: [
+                    "Waterproof",
+                    "Realistic wood look",
+                    "Comfortable underfoot",
+                    "Easy installation",
+                    "Low maintenance"
+                ],
                 images: [
-                    'https://via.placeholder.com/80x10/6366F1/FFFFFF?text=Design+1',
-                    'https://via.placeholder.com/80x10/F59E0B/FFFFFF?text=Design+2',
-                    'https://via.placeholder.com/80x10/EF4444/FFFFFF?text=Design+3',
-                    'https://via.placeholder.com/80x10/10B981/FFFFFF?text=Design+4'
+                    { url: 'https://via.placeholder.com/320x40/6366F1/FFFFFF?text=Oak+Natural', name: 'oak_natural_001.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/F59E0B/000000?text=Pine+Light', name: 'pine_light_002.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/EF4444/FFFFFF?text=Cherry+Dark', name: 'cherry_dark_003.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/10B981/FFFFFF?text=Walnut+Rich', name: 'walnut_rich_004.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/8B5CF6/FFFFFF?text=Mahogany', name: 'mahogany_005.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/06B6D4/FFFFFF?text=Birch+White', name: 'birch_white_006.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/84CC16/000000?text=Maple+Honey', name: 'maple_honey_007.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/F97316/FFFFFF?text=Teak+Golden', name: 'teak_golden_008.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/EC4899/FFFFFF?text=Rosewood', name: 'rosewood_009.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/14B8A6/FFFFFF?text=Ash+Grey', name: 'ash_grey_010.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/F472B6/000000?text=Beech+Cream', name: 'beech_cream_011.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/A855F7/FFFFFF?text=Ebony+Black', name: 'ebony_black_012.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/78716C/FFFFFF?text=Hickory+Brown', name: 'hickory_brown_013.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/374151/FFFFFF?text=Cedar+Aged', name: 'cedar_aged_014.jpg' },
+                    { url: 'https://via.placeholder.com/320x40/1F2937/FFFFFF?text=Bamboo+Dark', name: 'bamboo_dark_015.jpg' }
                 ]
             }
         };
@@ -356,6 +501,7 @@ images: [
         let selectedTileType = null;
         let selectedLocation = null;
         let selectedDesign = null;
+        let selectedDesignIndex = 0;
 
         // Language switching
         document.getElementById('language-select').addEventListener('change', function() {
@@ -384,52 +530,83 @@ images: [
         document.getElementById('tile-type').addEventListener('change', function() {
             selectedTileType = this.value;
             if (selectedTileType) {
+                showTileDetails(selectedTileType);
                 showTileGallery(selectedTileType);
             } else {
+                hideTileDetails();
                 hideTileGallery();
             }
         });
 
-function showTileGallery(tileType) {
-  const gallery = document.getElementById('tile-gallery');
-  const container = document.getElementById('gallery-container');
+        function showTileDetails(tileType) {
+            const tile = tileData[tileType];
+            const detailsSection = document.getElementById('tile-details');
+            
+            // Update main image
+            const mainImage = document.getElementById('main-tile-image');
+            mainImage.src = tile.images[0].url;
+            mainImage.alt = tile.name;
+            
+            // Update filename
+            document.getElementById('image-filename').textContent = tile.images[0].name;
+            
+            // Update tile information
+            document.getElementById('tile-category').textContent = tile.category;
+            document.getElementById('tile-description').textContent = tile.description;
+            document.getElementById('tile-dimensions').textContent = tile.dimensions;
+            
+            // Update usage tags
+            const usageContainer = document.getElementById('tile-usage');
+            usageContainer.innerHTML = '';
+            tile.usage.forEach(use => {
+                const tag = document.createElement('span');
+                tag.className = 'bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs';
+                tag.textContent = use;
+                usageContainer.appendChild(tag);
+            });
+            
+            // Update features
+            const featuresList = document.getElementById('tile-features');
+            featuresList.innerHTML = '';
+            tile.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.textContent = feature;
+                featuresList.appendChild(li);
+            });
+            
+            detailsSection.classList.remove('hidden');
+        }
 
-  gallery.classList.remove('hidden');
-  container.innerHTML = '';
+        function hideTileDetails() {
+            document.getElementById('tile-details').classList.add('hidden');
+        }
 
-  const tile = tileData[tileType];
-  tile.images.forEach((img, index) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'flex flex-col items-center min-w-full scroll-snap-center';
-
-    const image = document.createElement('img');
-    image.src = `https://emkuwa.github.io/tiles/images/${img.file}`;
-
-    image.alt = img.name;
-    image.className = 'tile-image w-full max-w-xs object-cover rounded border border-gray-300';
-
-    const caption = document.createElement('div');
-    caption.textContent = `${img.name} (${img.file})`;
-    caption.className = 'text-xs mt-2 text-center';
-
-    image.addEventListener('click', function () {
-      selectDesign(image, index);
-    });
-
-    wrapper.appendChild(image);
-    wrapper.appendChild(caption);
-    container.appendChild(wrapper);
-  });
-}
-
-
+        function showTileGallery(tileType) {
+            const gallery = document.getElementById('tile-gallery');
+            const container = document.getElementById('gallery-container');
+            
+            gallery.classList.remove('hidden');
+            container.innerHTML = '';
+            
+            const tile = tileData[tileType];
+            tile.images.forEach((imageData, index) => {
+                const img = document.createElement('img');
+                img.src = imageData.url;
+                img.alt = `Design ${index + 1}`;
+                img.className = 'tile-image w-20 h-20 object-cover rounded border border-gray-300';
+                img.addEventListener('click', function() {
+                    selectDesign(this, index, imageData);
+                });
+                container.appendChild(img);
+            });
+        }
 
         function hideTileGallery() {
             document.getElementById('tile-gallery').classList.add('hidden');
             selectedDesign = null;
         }
 
-        function selectDesign(imgElement, designIndex) {
+        function selectDesign(imgElement, designIndex, imageData) {
             // Remove previous selection
             document.querySelectorAll('.tile-image').forEach(img => {
                 img.classList.remove('selected');
@@ -438,7 +615,58 @@ function showTileGallery(tileType) {
             // Add selection to clicked image
             imgElement.classList.add('selected');
             selectedDesign = designIndex;
+            selectedDesignIndex = designIndex;
+            
+            // Update main image
+            const mainImage = document.getElementById('main-tile-image');
+            mainImage.src = imageData.url;
+            mainImage.alt = `Design ${designIndex + 1}`;
+            
+            // Update filename
+            document.getElementById('image-filename').textContent = imageData.name;
         }
+
+        // Preview functionality
+        document.getElementById('preview-btn').addEventListener('click', function() {
+            if (!selectedTileType) {
+                alert(currentLanguage === 'en' ? 'Please select a tile type first' : 'Tafadhali chagua aina ya vigae kwanza');
+                return;
+            }
+            showPreview();
+        });
+
+        function showPreview() {
+            const modal = document.getElementById('preview-modal');
+            const previewArea = document.getElementById('preview-area');
+            const tile = tileData[selectedTileType];
+            const selectedImage = tile.images[selectedDesignIndex];
+            
+            // Clear previous preview
+            previewArea.innerHTML = '';
+            
+            // Create a grid of tiles for preview (6x4 = 24 tiles)
+            for (let i = 0; i < 24; i++) {
+                const tileDiv = document.createElement('div');
+                tileDiv.className = 'preview-tile';
+                tileDiv.style.backgroundImage = `url(${selectedImage.url})`;
+                previewArea.appendChild(tileDiv);
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        // Close modal
+        document.getElementById('close-modal').addEventListener('click', function() {
+            document.getElementById('preview-modal').style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('preview-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
 
         // Location selection
         document.querySelectorAll('input[name="location"]').forEach(radio => {
